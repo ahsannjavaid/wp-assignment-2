@@ -1,24 +1,50 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import NavigationBar from "./components/NavigationBar";
+import AboutMe from "./pages/AboutMe";
+import Contact from "./pages/Contact";
+import Projects from "./pages/Projects";
+import DataEntry from "./pages/DataEntry";
+import Footer from "./components/Footer";
+import { useEffect, useState } from "react";
 
 function App() {
+  const [data, setData] = useState({
+    name: "",
+    bio: "",
+    profilePicture: "",
+    skills: "",
+    interests: "",
+    detailedDescription: "",
+    title: "",
+    description: "",
+    picture: "",
+    gitHubLink: "",
+    socialMedia: [
+      {
+        platform0: "",
+        url0: "",
+      },
+    ],
+  });
+
+  useEffect(() => {
+    const profile = JSON.parse(localStorage.getItem("profile"));
+    if (profile) setData(profile);
+  }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <NavigationBar />
+      <div className="container py-3">
+      <Routes>
+        <Route path="/" element={<AboutMe data={data} />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/data-entry" element={<DataEntry data={data} setData={setData} />} />
+        <Route path="/projects" element={<Projects />} />
+      </Routes>
+      </div>
+      <Footer />
+    </BrowserRouter>
   );
 }
 
